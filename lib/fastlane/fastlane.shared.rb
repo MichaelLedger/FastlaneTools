@@ -83,6 +83,22 @@ platform :ios do
         upload_local_dSYM_to_crashlytics
 
     end
+    
+    desc "Push a new analyze "
+    desc "Sample: fastlane analyze"
+    
+    lane :analyze do
+        
+        # pod_install
+        
+        authenticating_with_apple_services
+
+        fill_amplitude_id(value: app_amplitude_appstore_key)
+
+        match_appstore(readonly: true)
+
+        build_and_analyze
+    end
 
     desc "Push a new build to the AppCenter"
     desc "Sample: fastlane appcenter"
@@ -102,9 +118,9 @@ platform :ios do
 
         build_appcenter
 
-	    push_appcenter
-
         push_pgyer if upload_to_pgy == "true"
+
+	    push_appcenter
 
         upload_adhoc_dSYM_to_crashlytics
     end
@@ -119,9 +135,8 @@ platform :ios do
 		    export_options: {
                 method: export_method_app_store,
                 thinning: "<thin-for-all-variants>",
-                iCloudContainerEnvironment: "Production",
-		        uploadSymbols: true,
-		        compileBitcode: false
+		        include_symbols: true,
+		        include_bitcode: false
 		    },
             output_name: "#{app_name}.ipa"
 	    )
@@ -137,9 +152,8 @@ platform :ios do
             export_options: {
 		        method: export_method_ad_hoc,
 		        thinning: "<none>",
-		        iCloudContainerEnvironment: "Production",
-		        uploadSymbols: true,
-		        compileBitcode: false
+		        include_symbols: false,
+		        include_bitcode: false
             },
             output_name: "#{app_name}.ipa"
         )
@@ -165,7 +179,7 @@ platform :ios do
             api_token: appcenter_api_token,
             owner_name: appcenter_owner_name,
             app_name: appcenter_app_name,
-            ipa: "#{output_path}/#{export_method_ad_hoc}/#{app_name}.ipa",
+            file: "#{output_path}/#{export_method_ad_hoc}/#{app_name}.ipa",
             notify_testers: true,
             release_notes: lane_context[SharedValues::FL_CHANGELOG]
         )
@@ -228,6 +242,7 @@ platform :ios do
     desc "Fill in id for Amplitude"
     private_lane :fill_amplitude_id do |options|
         value = options[:value]
+        puts("AmplitudeApiKey is ==> #{value}")
         set_info_plist_value(path: app_plist_path, key: "AmplitudeApiKey", value: value)
     end
 
@@ -245,4 +260,17 @@ platform :ios do
         upload_symbols_to_crashlytics(dsym_path: filepath, gsp_path:gsp_path)
     end
     
+    desc "Build and analyze the project"
+    lane :build_and_analyze do
+        gym(
+            scheme: scheme,
+            clean: true,
+            xcargs: "analyze",
+            export_options: {
+                  compileBitcode: false,
+                  method: export_method_app_store,
+                  exportPath: "#{output_path}/#{export_method_app_store}"
+                }
+            )
+    end
 end

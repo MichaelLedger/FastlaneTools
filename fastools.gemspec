@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = 'fastools'
-  spec.version       = '0.1.6'
+  spec.version       = '0.1.10'
   spec.authors       = ['Edwin Gu']
   spec.email         = ['edwin@planetart.com']
   spec.description   = %q{A short description of fastools.}

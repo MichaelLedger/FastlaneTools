@@ -48,6 +48,7 @@ platform :ios do
        fail_on_name_taken: true,
        force_for_new_devices: force_for_new_devices,
        readonly: readonly,
+       include_mac_in_profiles: true,
        verbose: true,
      )
    end
@@ -85,7 +86,7 @@ platform :ios do
    lane :match_all do |options|
      readonly = options[:readonly]
 
-     add_devices()
+     #add_devices()
 
      match_development(readonly:readonly)
  

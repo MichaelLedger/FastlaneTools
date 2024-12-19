@@ -14,7 +14,7 @@ platform :ios do
       api_token: appcenter_api_token,
       owner_name:appcenter_owner_name,
       app_name: app_name,
-      ipa: "#{build_output_directory}/#{app_name}.ipa"
+      file: "#{build_output_directory}/#{app_name}.ipa"
     )
   end
   
