@@ -2,12 +2,12 @@
 
 Gem::Specification.new do |spec|
   spec.name          = 'fastools'
-  spec.version       = '0.1.10'
-  spec.authors       = ['Edwin Gu']
-  spec.email         = ['edwin@planetart.com']
+  spec.version       = '0.2.1'
+  spec.authors       = ['Michael Ledger']
+  spec.email         = ['MichaelLedger@163.com']
   spec.description   = %q{A short description of fastools.}
   spec.summary       = %q{A longer description of fastools.}
-  spec.homepage      = 'https://github.com/Planetart/fastools.git'
+  spec.homepage      = ''
   spec.license       = 'MIT'
 
   spec.files         = 'lib/*.rb'
